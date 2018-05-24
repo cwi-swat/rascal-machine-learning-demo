@@ -6,7 +6,7 @@
 We learned this code from Python examples on <https://machinelearningmastery.com/> by Jason Brownlee
 and translated (heavily) the Python to Rascal.
 }
-module analysis::learning::KNeirestNeighbors
+module analysis::learning::KNearestNeighbors
 
 extend analysis::learning::DataPoints;
 
