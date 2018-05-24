@@ -1,5 +1,5 @@
 @doc{
-.Synopsis machine learning algorithm based on the idea of decision trees
+.Synopsis machine learning algorithm based on kMeans clustering.
 
 .Description
 
