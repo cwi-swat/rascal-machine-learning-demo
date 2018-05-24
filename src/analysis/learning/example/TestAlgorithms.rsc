@@ -2,7 +2,7 @@ module analysis::learning::example::TestAlgorithms
 
 import analysis::learning::DataPoints;
 import analysis::learning::KMeans;
-import analysis::learning::KNeirestNeighbors;
+import analysis::learning::KNearestNeighbors;
 import analysis::learning::DecisionTrees;
 
 import util::Math;
