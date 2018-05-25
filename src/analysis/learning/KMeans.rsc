@@ -19,8 +19,8 @@ A centroid is the "average" point of a set of points, composed as the
 pairwise mean value of all points for each dimenions.
 }
 @memo  
-private Point centroid(set[Point] cl:{Point h, *_}) =
-  point([ sum([p.vec[i] | p <- cl]) / size(cl) | i <- index(h.vec)]); 
+private Point centroid(set[Point] cl) =
+  point([ sum([p.vec[i] | p <- cl]) / size(cl) | i <- [0..dim(cl)]]); 
 
 @doc{
 .Synopsis: simple partition simply breaks the input up in almost even parts, in order of appearance

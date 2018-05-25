@@ -31,13 +31,17 @@ private real gini(DecTree cand, set[Response] classes) {
    }
    
    real sqr(real r) = r * r;
-   real cumFreq(set[Point] corpus, set[Response] classes)
-      = (0.0 | sqr((0 | it + 1 | p <- corpus, p.resp == cl) / (1.000 * S)) | S := size(corpus), cl <- classes);
+   
+   int count(set[Point] corpus, Response ref)
+     = (0 | it + 1 | p <- corpus, p.resp == ref);
+     
+   real score(set[Point] corpus)
+      = (0.0 | it + sqr(count(corpus, cl) / (1.000 * S)) | S := size(corpus), cl <- classes);
       
    total = size(cand.lhs.cluster) + size(cand.rhs.cluster);
 
-   return (1.0 - cumFreq(cand.lhs.cluster, classes)) * (size(cand.lhs.cluster) / total)
-        + (1.0 - cumFreq(cand.rhs.cluster, classes)) * (size(cand.rhs.cluster) / total)
+   return (1.0 - score(cand.lhs.cluster)) * (size(cand.lhs.cluster) / total)
+        + (1.0 - score(cand.rhs.cluster)) * (size(cand.rhs.cluster) / total)
         ;
 }
 
