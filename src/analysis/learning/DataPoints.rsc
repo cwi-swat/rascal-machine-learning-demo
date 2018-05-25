@@ -41,6 +41,13 @@ data Point = point(list[real] vec, Response resp = silence());
 Point arbPoint(int d) = point([arbReal() | _ <- [0..d]]);
 
 @doc{
+.Synopsis Produce a randomized subset of a corpus of a given size relative to the original corpus
+}
+set[Point] subsample(set[Point] corpus, num ratio) 
+  = { l[arbInt(size(corpus))] | _ <- [0..round(size(corpus) * ratio)]}
+  when l := [*corpus];
+  
+@doc{
 .Synopsis 
 Return the number of dimensions for a point or a set of points.
 
@@ -112,4 +119,12 @@ set[Response] vote(set[Point] points) {
   d = distribution({<p, p.resp> | p <- points});
   m = max(d<1>);
   return {r | r <- d, d[r] == m}; 
+}
+
+@doc{
+.Synopsis return the responses that occur the most
+}
+set[Response] vote(list[Response] responses) {
+  d = distribution(responses);
+  return d<1,0>[max(d<1>)];
 }

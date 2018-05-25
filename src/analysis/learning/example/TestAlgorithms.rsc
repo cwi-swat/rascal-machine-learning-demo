@@ -4,6 +4,7 @@ import analysis::learning::DataPoints;
 import analysis::learning::KMeans;
 import analysis::learning::KNearestNeighbors;
 import analysis::learning::DecisionTrees;
+import analysis::learning::BootstrapAggregation;
 
 import util::Math;
 import IO;
@@ -22,9 +23,16 @@ void testAlgorithms(set[Point] trainers, set[Point] tests) {
   correct = (0 | r == t.resp ? it + 1 : it | t <- tests, {r, *_} := respond(trainers, t, 5));
   println("Accuracy of kNN is <correct> out of <size(tests)> = <percent(correct, size(tests))>%");
   
-  println("Training DecisionTrees");
+  println("Training Decision Tree");
   tree = buildDecTree(trainers, maxDepth=5, minSize=10);
-  println("Testing the decision tree");
+  println("Testing the Decision Tree");
   correct = (0 | r == t.resp ? it + 1 : it | t <- tests, {r, *_} := respond(tree, t));
   println("Accuracy of DecisionTree is <correct> out of <size(tests)> = <percent(correct, size(tests))>%");
+  
+  println("Training Bagged Decision Trees");
+  trees = buildDecTrees(trainers, maxDepth=5, minSize=10, sampleRatio=0.5, treeCount=20);
+  println("Testing the Bagged Decision Trees");
+  correct = (0 | r == t.resp ? it + 1 : it | t <- tests, {r, *_} := respond(trees, t));
+  println("Accuracy of Bagged Decision Trees is <correct> out of <size(tests)> = <percent(correct, size(tests))>%");
+  
 }
