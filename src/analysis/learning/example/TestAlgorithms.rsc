@@ -5,6 +5,7 @@ import analysis::learning::KMeans;
 import analysis::learning::KNearestNeighbors;
 import analysis::learning::DecisionTrees;
 import analysis::learning::BootstrapAggregation;
+import analysis::learning::RandomForest;
 
 import util::Math;
 import IO;
@@ -34,5 +35,11 @@ void testAlgorithms(set[Point] trainers, set[Point] tests) {
   println("Testing the Bagged Decision Trees");
   correct = (0 | r == t.resp ? it + 1 : it | t <- tests, {r, *_} := respond(trees, t));
   println("Accuracy of Bagged Decision Trees is <correct> out of <size(tests)> = <percent(correct, size(tests))>%");
+  
+  println("Training a Random Forest");
+  forest = buildRandomForest(trainers, maxDepth=5, minSize=10, sampleRatio=0.5, treeCount=20, featureCount=dim(trainers) / 2);
+  println("Testing the Random Forest");
+  correct = (0 | r == t.resp ? it + 1 : it | t <- tests, {r, *_} := respond(forest, t));
+  println("Accuracy of the Random Forest is <correct> out of <size(tests)> = <percent(correct, size(tests))>%");
   
 }

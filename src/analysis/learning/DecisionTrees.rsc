@@ -61,7 +61,8 @@ private default DecTree buildDecTree(set[Point] corpus, int md, int ms) {
   // over the left and right sides of the new tree, wins.
   best = ( init 
          | gini(n, classes) < gini(it, classes) ? n : it 
-         | dim <- [0..dim(corpus)], pivot <- corpus, n := split(dim, pivot.vec[dim], corpus));
+         | dim <- [0..dim(corpus)], pivot <- corpus, n := split(dim, pivot.vec[dim], corpus)
+         );
          
   // the current split is best, now we recursively split the left and right sides again
   // until the corpus is too small to split or until the max depth of the tree has been reached       
@@ -70,6 +71,8 @@ private default DecTree buildDecTree(set[Point] corpus, int md, int ms) {
   return best; 
 }  
 
+// prediction is a matter of a binary search through the tree, and letting the cluster
+// at the leaf node respond by voting:
 set[Response] respond(end(set[Point] cluster), Point _) = vote(cluster);
 set[Response] respond(split(int dim, real pivot, DecTree lhs, DecTree rhs), Point instance)
   = instance.vec[dim] < pivot ? respond(lhs, instance) : respond(rhs, instance);

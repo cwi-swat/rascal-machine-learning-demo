@@ -41,10 +41,10 @@ data Point = point(list[real] vec, Response resp = silence());
 Point arbPoint(int d) = point([arbReal() | _ <- [0..d]]);
 
 @doc{
-.Synopsis Produce a randomized subset of a corpus of a given size relative to the original corpus
+.Synopsis Produce a randomized subset by selecting an element at random _count_ many times. 
 }
-set[Point] subsample(set[Point] corpus, num ratio) 
-  = { l[arbInt(size(corpus))] | _ <- [0..round(size(corpus) * ratio)]}
+set[&T] subsample(set[&T] corpus, int count) 
+  = { l[arbInt(size(corpus))] | _ <- [0..count]}
   when l := [*corpus];
   
 @doc{
