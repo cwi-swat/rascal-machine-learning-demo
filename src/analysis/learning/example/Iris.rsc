@@ -18,6 +18,5 @@ alias Iris = rel[real sepalLength, real sepalWidth, real petalLength, real petal
 void irisDemo() {
   raw = readCSV(#Iris, |project://rascal-machine-learning-demo/src/analysis/learning/example/iris.csv|);
   points = {point([d.sepalLength, d.sepalWidth, d.petalLength, d.petalWidth], resp=class(d.class)) | d <- raw};
-  <trainers, tests> = split(points, 2r3);
-  testAlgorithms(trainers, tests);
+  testAlgorithmAccuracy(points);
 }

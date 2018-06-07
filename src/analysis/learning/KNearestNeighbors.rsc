@@ -10,6 +10,10 @@ module analysis::learning::KNearestNeighbors
 
 extend analysis::learning::DataPoints;
 
+import Set;
+import util::Benchmark;
+import IO;
+
 @doc{
 .Synopsis 
 Compute the k nearest neighbors in the corpus to the instance point.
@@ -19,7 +23,7 @@ Compute the k nearest neighbors in the corpus to the instance point.
 set[Point] neighbors(set[Point] corpus, Point instance, int k) {
   bool nearest(Point a, Point b) = nearerTo(instance, a, b);
   
-  return {*sort(corpus, nearest)[..k]}; 
+  return {*top(k, corpus, nearest)};
 }
   
 private bool nearerTo(Point pivot, Point a, Point b) 

@@ -37,7 +37,7 @@ a set of initial centroids using any distribution (using knowledge on the input 
 and then sample efficiently sample around these centroids using another 
 distribution function.
 }
-Clusters simplePartition(list[Point] cl, int k) = kFolds(cl, k);
+Clusters simplePartition(set[Point] cl, int k) = kFolds(cl, k);
 
 @memo
 private rel[Point centroid, Point point] centroids(Clusters clusters)

@@ -44,8 +44,8 @@ Point arbPoint(int d) = point([arbReal() | _ <- [0..d]]);
 .Synopsis Produce a randomized subset by selecting an element at random _count_ many times. 
 }
 set[&T] subsample(set[&T] corpus, int count) 
-  = { l[arbInt(size(corpus))] | _ <- [0..count]}
-  when l := [*corpus];
+  = { l[arbInt(S)] | _ <- [0..count]}
+  when l := [*corpus], S := size(l);
   
 @doc{
 .Synopsis 
@@ -58,18 +58,6 @@ int dim(Point p) = size(p.vec);
 int dim(set[Point] _:{Point h, *_}) = dim(h);
 int dim({}) = 0;
 
-@doc{
-.Synopsis Compute the maximum number of dimensions used in this set of points
-}
-int maxDim(set[Point] corpus) = max({size(p.vec) | p <- corpus});
-int maxDim({}) = 0;
-
-@doc{
-.Synopsis Compute the minumum number of dimensions used in this set of points
-}
-int minDim(set[Point] corpus) = min({size(p.vec) | p <- corpus});
-int minDim({}) = 0;
- 
 private real sqr(real r) = r * r;
 
 @doc{
@@ -89,33 +77,35 @@ real dist(Point p, Point q)
   = (.0 | it + sqr(abs((p.vec[i]?.0) - (q.vec[i]?.0))) | i <- [0..max(size(p.vec),size(q.vec))]);
 
 @doc{
-.Synopsis split a data set into two parts, with `frac` portion associated 
+.Synopsis randomly split a data set into two parts, with `frac` portion associated 
 to a training set and the rest of the data moved to a testing set.
 }
 tuple[set[Point] trainers, set[Point] tests] split(set[Point] corpus, num frac) {
-  trainers = {*([*corpus][..round(frac * size(corpus))])};
+  trainers = subsample(corpus, round(frac * size(corpus)));
   tests = corpus - trainers;
   return <trainers, tests>;
 }
 
 @doc{
-.Synopsis Split a data-set into k almost equal parts.
+.Synopsis Split a data-set into k almost equal parts but randomly selected parts
 
 .Description
 
 This is handy for generating an initial "random" classification into k classes,
 or to split a data set for k-fold cross-validation in equal parts.
 }
-set[set[Point]] kFolds(set[Point] corp, int k) = kFolds([*corp], k);
-set[set[Point]] kFolds(list[Point] corp, 0) = {};
-set[set[Point]] kFolds(list[Point] corp, 1) = {{*corp}};
-set[set[Point]] kFolds(list[Point] corp, int k) = {{*corp[..s/k]}, *kFolds(corp[s/k..], k - 1)} 
-  when s := size(corp);
+set[set[Point]] kFolds(set[Point] corp, 0) = {};
+set[set[Point]] kFolds(set[Point] corp, 1) = {{*corp}};
+set[set[Point]] kFolds(set[Point] corp, int k) = {fold, *kFolds(rest, k - 1)} 
+  when s := size(corp),
+       fold := subsample(corp, s/k),
+       rest := corp - fold;
 
 @doc{
 .Synopsis get the responses that occurs the most in a set of data points
 }   
-set[Response] vote(set[Point] points) {
+set[Response] vote({}) = {silence()};
+default set[Response] vote(set[Point] points) {
   d = distribution({<p, p.resp> | p <- points});
   m = max(d<1>);
   return {r | r <- d, d[r] == m}; 

@@ -22,7 +22,6 @@ void banknoteDemo() {
   raw = readCSV(#Banknote, |project://rascal-machine-learning-demo/src/analysis/learning/example/banknote.csv|);
   
   points = {point([d.variance, d.skewness, d.curtosis, d.entropy], resp=class(d.class)) | d <- raw};
-  <trainers, tests> = split(points, 2r3);
 
-  testAlgorithms(trainers, tests);
+  testAlgorithmAccuracy(points);
 }
